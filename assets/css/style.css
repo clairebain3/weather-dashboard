@@ -5,8 +5,38 @@ h1 {
     text-align: center;
 }
 
-.container {
+#container1 {
     border-style: dashed;
     border-color: black;
     border: 5px;
+    width: 70%;
+}
+
+#nextFiveDays {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    
+
+}
+
+#searchContainer {
+width: 20%;
+height: 90%;
+display: block;
+background-color: aquamarine;
+
+}
+
+#searchbtn {
+    width: 90%;
+    margin: 10px;
+    color: white;
+    background-color: blue;
+}
+
+#site-search {
+
+    width: 90%;
+    margin: 10px;
 }
