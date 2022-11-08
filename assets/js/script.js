@@ -2,11 +2,20 @@
 var searchEl = document.getElementById('site-search')
 var searchBtnEl = document.getElementById('searchbtn')
 var futureContainerEl = document.getElementById('nextFiveDays')
+var cityNameEl = document.getElementById('city0')
+var tempEl = document.getElementById('temp0')
+var windEl = document.getElementById('wind0')
+var humidityEl = document.getElementById('humidity0')
+var iconEl = document.getElementById('icon')
 
 let dateCollection = []
 let tempCollection = []
 let windCollection = []
 let humidityCollection = []
+let iconCollection = []
+let iconurl = ''
+
+
 
 // declare variables
 let latitude = ''
@@ -18,11 +27,14 @@ let wind = ''
 let x = 0
 
 searchBtnEl.addEventListener('click', function(event){
+    x = 0
+    event.preventDefault()
      dateCollection = document.querySelectorAll('.date')
      tempCollection = document.querySelectorAll('.temp')
      windCollection = document.querySelectorAll('.wind')
      humidityCollection = document.querySelectorAll('.humidity')
-    event.preventDefault()
+     iconCollection = document.querySelectorAll('#wicon')
+
     getLatAndLon();
     getApi();
     getCurrentWeather();
@@ -69,15 +81,18 @@ function getLatAndLon() {
 
         for (var i = 0; i < data.list.length; i = i + 8) {
         temp = data.list[i].main.temp;
+        iconcode = data.list[i].weather[0].icon;
+        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+        iconCollection[x].src = iconurl
         console.log(data);
         date = data.list[i].dt_txt;
         date = moment(date).format('MMMM Do YYYY')
         wind = data.list[i].wind.speed;
         humidity = data.list[i].main.humidity;
-        dateCollection[x].textContent = date;
-        tempCollection[x].textContent = temp;
-        windCollection[x].textContent = wind;
-        humidityCollection[x].textContent = humidity;
+        dateCollection[x].textContent = 'Date: ' + date;
+        tempCollection[x].textContent = 'Temp: ' + temp + '°F';
+        windCollection[x].textContent = 'Wind: ' + wind + ' MPH';
+        humidityCollection[x].textContent = 'Humidity: ' + humidity + '%';
         x = x +1;
         
 
@@ -106,7 +121,7 @@ function getLatAndLon() {
 
     }
     function getCurrentWeather() { 
-        console.log('lat' + latitude + 'lon' + longitude)
+        // console.log('lat' + latitude + 'lon' + longitude)
 
         let curWeatherURL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude +'&lon=' + longitude + '&appid=59453b64a7a2e400a8acc87cc47e62bc&units=imperial';
       fetch(curWeatherURL)
@@ -119,7 +134,17 @@ function getLatAndLon() {
         temp = data.main.temp;
         humidity = data.main.humidity;
         wind = data.wind.speed;
-        console.log('city' + city + 'temp' + temp + 'humidity' + humidity + 'wind' + wind);
+        iconcode = data.weather[0].icon;
+        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+        console.log(iconurl)
+        iconEl.src = iconurl;
+        cityNameEl.textContent = city
+        tempEl.textContent = 'Temp: ' + temp + '°F';
+        humidityEl.textContent = 'Humidity: ' + humidity + '%';
+        windEl.textContent = 'Wind: ' + wind + ' MPH';
+
+
+        // console.log('city' + city + 'temp' + temp + 'humidity' + humidity + 'wind' + wind);
         
     });
 
