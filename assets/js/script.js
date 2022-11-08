@@ -55,7 +55,7 @@ function getLatAndLon() {
 
     var cityName = searchEl.value
     console.log(cityName)
-    var requestUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=59453b64a7a2e400a8acc87cc47e62bc';
+    var requestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=59453b64a7a2e400a8acc87cc47e62bc';
   
     fetch(requestUrl)
       .then(function (response) {
