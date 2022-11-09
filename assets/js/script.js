@@ -74,7 +74,7 @@ function getLatAndLon(cityName) {
     function getApi(latitude, longitude) { 
         console.log('lat' + latitude + 'lon' + longitude)
 
-        let nextUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latitude +'&lon=' + longitude + '&appid=59453b64a7a2e400a8acc87cc47e62bc&units=imperial';
+        let nextUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + latitude +'&lon=' + longitude + '&appid=59453b64a7a2e400a8acc87cc47e62bc&units=imperial';
       fetch(nextUrl)
       .then(function (response) {
         return response.json();
