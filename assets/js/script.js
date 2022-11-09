@@ -18,8 +18,7 @@ let iconurl = ''
 
 
 // declare variables
-let latitude = ''
-let longitude = ''
+
 let temp = 0
 let city = ''
 let humidity = ''
@@ -35,9 +34,7 @@ searchBtnEl.addEventListener('click', function(event){
      humidityCollection = document.querySelectorAll('.humidity')
      iconCollection = document.querySelectorAll('#wicon')
 
-    getLatAndLon();
-    getApi();
-    getCurrentWeather();
+     handleUserInput()
 
   });
 
@@ -47,14 +44,18 @@ searchBtnEl.addEventListener('click', function(event){
 // let humidityEl = document.createElement('p');
 // let homeScreen = false
 
+function handleUserInput(){
+
+  var cityName = searchEl.value
+  getLatAndLon(cityName)
+}
+
 // API
 
-function getLatAndLon() {
+function getLatAndLon(cityName) {
     // event.preventDefault();
     
 
-    var cityName = searchEl.value
-    console.log(cityName)
     var requestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=59453b64a7a2e400a8acc87cc47e62bc';
   
     fetch(requestUrl)
@@ -62,14 +63,15 @@ function getLatAndLon() {
         return response.json();
       })
       .then(function (data) {
-           latitude = data[0].lat;
-           longitude = data[0].lon;
-          
+          let latitude = data[0].lat;
+          let longitude = data[0].lon;
+          getApi(latitude, longitude)
+          getCurrentWeather(latitude, longitude)
         });
 
     }
     // function to get future weather data
-    function getApi() { 
+    function getApi(latitude, longitude) { 
         console.log('lat' + latitude + 'lon' + longitude)
 
         let nextUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latitude +'&lon=' + longitude + '&appid=59453b64a7a2e400a8acc87cc47e62bc&units=imperial';
@@ -120,7 +122,7 @@ function getLatAndLon() {
     });
 
     }
-    function getCurrentWeather() { 
+    function getCurrentWeather(latitude, longitude) { 
         // console.log('lat' + latitude + 'lon' + longitude)
 
         let curWeatherURL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude +'&lon=' + longitude + '&appid=59453b64a7a2e400a8acc87cc47e62bc&units=imperial';
