@@ -23,8 +23,9 @@ h1 {
 #searchContainer {
 width: 20%;
 height: 90%;
-display: block;
+display: flex;
 background-color: aquamarine;
+justify-content: left;
 
 }
 
@@ -39,4 +40,23 @@ background-color: aquamarine;
 
     width: 90%;
     margin: 10px;
+}
+
+#searchHistory {
+    display: flex;
+    justify-content: right;
+
+
+}
+.containers {
+
+    /* not sure yet */
+}
+
+.searchHistoryBtn {
+    margin: 10px;
+    color: white;
+    background-color: blue;
+
+
 }

@@ -3,15 +3,11 @@ var searchEl = document.getElementById('site-search')
 var searchBtnEl = document.getElementById('searchbtn')
 var futureContainerEl = document.getElementById('nextFiveDays')
 var currentContainerEl = document.getElementById('container1')
+var searchHistoryEl = document.getElementById('searchHistory')
 
 
 
 
-// let dateCollection = []
-// let tempCollection = []
-// let windCollection = []
-// let humidityCollection = []
-// let iconCollection = []
 let iconurl = ''
 
 
@@ -25,26 +21,51 @@ let wind = ''
 let x = 0
 
 
+
 searchBtnEl.addEventListener('click', function(event){
     x = 0
     event.preventDefault()
-    //  dateCollection = document.querySelectorAll('.date')
-    //  tempCollection = document.querySelectorAll('.temp')
-    //  windCollection = document.querySelectorAll('.wind')
-    //  humidityCollection = document.querySelectorAll('.humidity')
-    //  iconCollection = document.querySelectorAll('#wicon')
-
      handleUserInput()
 
   });
 
 
-// let homeScreen = false
+
+// function to get past searches from local storage
+function init() {
+
+
+  var storedSearches = JSON.parse(localStorage.getItem("searches"))
+  if (storedSearches != null){
+   var arrSearches = storedSearches;
+   displayPastSearches(arrSearches);
+  }
+
+}
+function displayPastSearches(arrSearches){
+
+  for (let i = 0; i <arrSearches.length; i ++){
+    let curSearch = arrSearches[i];
+    let btn = document.createElement("button");
+    btn.setAttribute("class","searchHistoryBtn");
+    btn.textContent = curSearch;
+    searchHistoryEl.appendchild(btn);
+
+  }
+// keep passing arrsearches here
+}
+
+function addSearchesLocalStor(cityName, arrSearches){
+  arrSearches.push(cityName)
+  localStorage.setItem("searches"), JSON.stringify(arrSearches)
+
+}
 
 function handleUserInput(){
 
-  var cityName = searchEl.value
-  getLatAndLon(cityName)
+  var cityName = searchEl.value;
+  getLatAndLon(cityName);
+  addSearchesLocalStor(cityName);
 }
 
 // API
@@ -64,6 +85,7 @@ function getLatAndLon(cityName) {
           let longitude = data[0].lon;
           getApi(latitude, longitude)
           getCurrentWeather(latitude, longitude)
+          setLocalStorage(cityName)
         });
 
     }
@@ -98,14 +120,6 @@ function getLatAndLon(cityName) {
         date = moment(date).format('MMMM Do YYYY')
         wind = data.list[i].wind.speed;
         humidity = data.list[i].main.humidity;
-        // dateCollection[x].textContent = 'Date: ' + date;
-        // tempCollection[x].textContent = 'Temp: ' + temp + '°F';
-        // windCollection[x].textContent = 'Wind: ' + wind + ' MPH';
-        // humidityCollection[x].textContent = 'Humidity: ' + humidity + '%';
-        // x = x +1;
-
-
-
 
     //     //Setting the text of the h3 element and p element.
     var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
@@ -115,17 +129,10 @@ function getLatAndLon(cityName) {
         tempEl.textContent = 'Temp: ' + temp + '°F';
         windEl.textContent = 'Wind: ' + wind + 'MPH';
         humidityEl.textContent = 'Humidity: ' + humidity + '%';
-
-        // if (homeScreen === false){
-
-
         containerEl.setAttribute('class','containers')
-    
         containerEl.append(dateEl, iconEl, tempEl, windEl, humidityEl);
         futureContainerEl.append(containerEl);
     
-    // }
-    //     // console.log(temp + 'w' + wind + 'h' + humidity + 'd' + date);
         }
     });
 
@@ -156,25 +163,42 @@ function getLatAndLon(cityName) {
         var curIconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
 
         console.log(iconurl)
-        // curIconEl.src = iconurl;
         cityNameEl.textContent = city
         curTempEl.textContent = 'Temp: ' + temp + '°F';
         curHumidityEl.textContent = 'Humidity: ' + humidity + '%';
         curWindEl.textContent = 'Wind: ' + wind + ' MPH';
         curIconEl.src = curIconurl
-
-
         curContainerEl.setAttribute('class','containers')
-    
         curContainerEl.append(cityNameEl, curIconEl, curTempEl, curWindEl, curHumidityEl);
         currentContainerEl.append(curContainerEl);
-
-
-        // console.log('city' + city + 'temp' + temp + 'humidity' + humidity + 'wind' + wind);
         
     });
 
     }
+
+    function setLocalStorage(cityName){
+      init();
+      //if search button doesn't exist already
+
+      var storageContainerEl = document.createElement('div')
+      let storageButtonEl = document.createElement('button');
+      storageButtonEl.setAttribute('class','searchHistoryBtn')
+      storageButtonEl.textContent = cityName
+      storageContainerEl.append(storageButtonEl)
+      searchHistoryEl.append(storageContainerEl)
+
+
+      
+    }
+
+    searchHistoryEl.addEventListener('click',function(event){
+      var element = event.target
+      if(element.matches(".searchHistoryBtn")){
+        var name = element.textContent
+        getLatAndLon(name);
+      }
+
+    })
 
 
 
